@@ -30,7 +30,7 @@ def gaussian_elimination(matrix_a, matrix_b):
     np.set_printoptions(formatter={'all': lambda x: fraction_to_str(x)}, precision=3, suppress=True)
 
     if matrix_b.shape[1] > 1 or matrix_b.shape[0] != matrix_a.shape[0]:
-        print('常數項raw不對')
+        print('常數項數量不對')
         return
 
     matrix_c = np.hstack([matrix_a, matrix_b])
