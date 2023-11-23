@@ -29,41 +29,53 @@ def fraction_to_str(x):
 def gaussian_elimination(matrix_a, matrix_b):
     # 儲存原本numpy的print設定
     original_options = np.get_printoptions()
-    # 改變numpy的print選項
+    # 改變numpy的print設定
     np.set_printoptions(formatter={'all': lambda x: fraction_to_str(x)}, precision=3, suppress=True)
 
+    # 在產生增廣矩陣前，檢查常數項數量
     if matrix_b.shape[1] > 1 or matrix_b.shape[0] != matrix_a.shape[0]:
         print('常數項數量不對')
         return
 
+    # 產生增廣矩陣
     matrix_c = np.hstack([matrix_a, matrix_b])
     print('增廣矩陣')
     print(matrix_c)
 
+    # 先將所有矩陣轉為浮點數，再轉為分數
     matrix_c = matrix_c.astype(float)
     matrix_c = vectorized_float_to_fraction(matrix_c)
 
+    # 決定高斯消去法要做幾個column，這樣即使方程組不是方陣也能執行
     times = min(matrix_c.shape[0], matrix_c.shape[1])
 
+    # i 是每一個column
     for i in range(0, times):
+        # 處理對角項為0的狀況
         if matrix_c[i, i] == Fraction(0, 1):
             # print('除零錯誤')
+            # 從剩下未處理的列找到同個column不是0的來做列交換
             for k in range(i+1, times):
                 if matrix_c[k, i] != Fraction(0, 1):
                     temp = matrix_c[i]
                     matrix_c[i] = matrix_c[k]
                     matrix_c[k] = temp
+                    # 有成功交換到一次就退出
                     break
 
+        # 用對角項去消掉其他列
         for j in range(0, times):
+            # 對角項本身不處理，並且確保該列該column不是0，以及對角項本身不是零(若之前的列交換都失敗，還是要避免除零錯誤)
             if j != i and matrix_c[j, i] != Fraction(0, 1) and matrix_c[i, i] != Fraction(0, 1):
                 factor = matrix_c[j, i] / matrix_c[i, i]
                 matrix_c[j] = matrix_c[j] - (matrix_c[i] * factor)
 
+        # 這個column做完後將對角項變為1(若對角項不是0)
         if matrix_c[i, i] != Fraction(0, 1):
             factor = 1 / matrix_c[i, i]
             matrix_c[i] = matrix_c[i] * factor
 
+    # 最後印出結果
     print('解')
     print(matrix_c)
 
