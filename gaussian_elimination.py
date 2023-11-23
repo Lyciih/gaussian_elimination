@@ -44,7 +44,7 @@ def gaussian_elimination(matrix_a, matrix_b):
 
     for i in range(0, times):
         if matrix_c[i, i] == Fraction(0, 1):
-            #print('除零錯誤')
+            # print('除零錯誤')
             for k in range(i+1, times):
                 if matrix_c[k, i] != Fraction(0, 1):
                     temp = matrix_c[i]
