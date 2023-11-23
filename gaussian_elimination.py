@@ -1,7 +1,18 @@
 import numpy as np
-from fractions import Fraction
+from fractions import Fraction  # 使用分數進行運算
 
 
+# 為了確保計算過程中不會遇到浮點數精度問題
+# 將numpy中的浮點數轉換為Fraction分數
+def float_to_fraction(x):
+    return Fraction(x).limit_denominator()
+
+
+# 將float_to_fraction(x)函數項量化，變成可以用來對矩陣的每個元素做同樣操作的函數
+vectorized_float_to_fraction = np.vectorize(float_to_fraction)
+
+
+# Fraction在print時的顯示方式不好閱讀，需要將其修飾一下
 # 此函數被用來做為Fraction的print設定
 def fraction_to_str(x):
     if isinstance(x, Fraction):
@@ -11,15 +22,6 @@ def fraction_to_str(x):
             return f"{x.numerator}/{x.denominator}"
     else:
         return str(x)
-
-
-# 將numpy中的浮點數轉換為Fraction分數
-def float_to_fraction(x):
-    return Fraction(x).limit_denominator()
-
-
-# 將float_to_fraction(x)函數項量化，變成可以用來對矩陣的每個元素做同樣操作的函數
-vectorized_float_to_fraction = np.vectorize(float_to_fraction)
 
 
 # 高斯消去法本體
@@ -64,7 +66,7 @@ def gaussian_elimination(matrix_a, matrix_b):
     print('解')
     print(matrix_c)
 
-    # 將numpy的print設定改回來，避免被當成library引用時影響其他模組的運作
+    # 將numpy的print設定改回來，避免未來被當成library引用時影響其他模組的運作
     np.set_printoptions(**original_options)
 
 
