@@ -1,5 +1,5 @@
 import numpy as np
-from fractions import Fraction  # 使用分數進行運算
+from fractions import Fraction  # 使用分數進行運算以確保精度
 
 
 # 為了確保計算過程中不會遇到浮點數精度問題
